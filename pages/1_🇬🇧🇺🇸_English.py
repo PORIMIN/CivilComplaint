@@ -14,7 +14,7 @@ api_key = os.getenv("UPSTAGE_API_KEY")
 
 # PDF 파일 경로 설정
 pdf_files = {
-    "외국인 체류지변경 신고서": "../pdf_documents/외국인_체류지변경_신고서.pdf"
+    "외국인 체류지변경 신고서": "pdf_documents/외국인_체류지변경_신고서.pdf"
     # 필요한 다른 PDF 파일 경로도 추가할 수 있습니다.
 }
 
@@ -66,13 +66,16 @@ def english_page():
             # 추가 질문 제공
             follow_up = st.radio(
                 "Do you want to see the foreigner residence change form in English or fill it out in Korean?",
-                ("Yes, in English", "Yes, fill in Korean", "No, thanks")
+                ("Let me handle it myself; just guide me to the address with the form.", "Yes, fill in Korean", "No, thanks")
             )
 
             # 사용자 선택에 따른 응답
-            if follow_up == "Yes, in English":
+            if follow_up == "Let me handle it myself; just guide me to the address with the form.":
                 st.write("### Foreign Residence Change Form in English")
-                st.write("Please find the English form here.")
+                form_url = "https://www.hygn.go.kr/00428/00435/00501.web"
+                st.markdown(f"[Open English Form]({form_url})", unsafe_allow_html=True)
+
+
             
             elif follow_up == "Yes, fill in Korean":
                 st.write("### 외국인 체류지변경 신고서 작성하기")
@@ -80,7 +83,8 @@ def english_page():
 
         else:
             # 일반적인 질문 처리
-            selected_file_path = pdf_files["외국인 체류지변경 신고서"]
+            selected_file_path = pdf_files.get("외국인 체류지변경 신고서", "파일을 찾을 수 없습니다")
+            print(selected_file_path)
             db = prepare_embeddings(selected_file_path)
             retriever = db.as_retriever()
 
