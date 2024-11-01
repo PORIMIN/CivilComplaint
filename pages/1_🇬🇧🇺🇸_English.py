@@ -66,7 +66,7 @@ def english_page():
             # 추가 질문 제공
             follow_up = st.radio(
                 "Do you want to see the foreigner residence change form in English or fill it out in Korean?",
-                ("Let me handle it myself; just guide me to the address with the form.", "Yes, fill in Korean", "No, thanks")
+                ("Let me handle it myself; just guide me to the address with the form.", "Yes, fill in Korean")
             )
 
             # 사용자 선택에 따른 응답
