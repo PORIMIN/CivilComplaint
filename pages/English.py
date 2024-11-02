@@ -45,7 +45,7 @@ def english_page():
     st.write("This page provides information related to foreigner residence change notifications.")
 
     # 질문 입력
-    query = st.text_input("Enter your question below", "e.g., I want to move, what administrative procedures should I follow?")
+    query = st.text_input("Enter your question below", "I want to move, what administrative procedures should I follow?")
 
     # 질문이 특정 내용일 경우 기본 응답을 설정
     default_response = """
@@ -74,12 +74,14 @@ def english_page():
                 st.write("### Foreign Residence Change Form in English")
                 form_url = "https://www.hygn.go.kr/00428/00435/00501.web"
                 st.markdown(f"[Open English Form]({form_url})", unsafe_allow_html=True)
-
-
-            
+                
+                
             elif follow_up == "Yes, fill in Korean":
                 st.write("### 외국인 체류지변경 신고서 작성하기")
-                st.write("Please proceed to fill out the form in Korean.")
+                st.write("Redirecting to the PDF form filling page...")
+            
+                # 쿼리 파라미터를 설정하여 페이지 전환
+                st.experimental_set_query_params(page="pdf_show")
 
         else:
             # 일반적인 질문 처리
