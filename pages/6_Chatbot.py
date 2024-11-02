@@ -65,25 +65,6 @@ def english_page():
             st.write("### Response")
             st.write(default_response)
 
-            # 추가 질문 제공
-            follow_up = st.radio(
-                "Do you want to see the foreigner residence change form in English or fill it out in Korean?",
-                ("Let me handle it myself; just guide me to the address with the form.", "Yes, fill in Korean")
-            )
-
-            # 사용자 선택에 따른 응답
-            if follow_up == "Let me handle it myself; just guide me to the address with the form.":
-                st.write("### Foreign Residence Change Form in English")
-                form_url = "https://www.hygn.go.kr/00428/00435/00501.web"
-                st.markdown(f"[Open English Form]({form_url})", unsafe_allow_html=True)
-                
-                
-            elif follow_up == "Yes, fill in Korean":
-                st.write("### 외국인 체류지변경 신고서 작성하기")
-                st.write("Redirecting to the PDF form filling page...")
-            
-                # 쿼리 파라미터를 설정하여 페이지 전환
-                st.experimental_set_query_params(page="pdf_show")
 
         else:
             # 일반적인 질문 처리
@@ -124,21 +105,6 @@ def english_page():
             st.write("### Response")
             st.write(response)
 
-        # 라디오 버튼 추가 - 모든 사용자에게 선택지를 제공
-        follow_up = st.radio(
-            "Do you want to see the foreigner residence change form in English or fill it out in Korean?",
-            ("Let me handle it myself; just guide me to the address with the form.", "Yes, fill in Korean")
-        )
-
-        # 사용자 선택에 따른 응답
-        if follow_up == "Let me handle it myself; just guide me to the address with the form.":
-            st.write("### Foreign Residence Change Form in English")
-            form_url = "https://www.hygn.go.kr/00428/00435/00501.web"
-            st.markdown(f"[Open English Form]({form_url})", unsafe_allow_html=True)
-
-        elif follow_up == "Yes, fill in Korean":
-            st.write("### 외국인 체류지변경 신고서 작성하기")
-            st.write("Please proceed to fill out the form in Korean.")
 
 # 영어 안내 페이지 렌더링
 english_page()
