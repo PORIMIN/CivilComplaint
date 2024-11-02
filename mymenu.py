@@ -4,11 +4,12 @@ import webbrowser
 # 세션 상태 초기화
 if 'page' not in st.session_state:
     st.session_state.page = 'main'
-if 'keyword' not in st.session_state:
-    st.session_state.keyword = ''
+if 'query' not in st.session_state:
+    st.session_state.query = ''
 
 def switch_to_second_page():
     st.session_state.page = 'second'
+    second_page()
 
 def go_to_main():
     st.session_state.page = 'main'
@@ -16,49 +17,77 @@ def go_to_main():
 def handle_form_submit():
     st.success(f"제출되었습니다!\n이름: {st.session_state.name}\n이메일: {st.session_state.email}")
 
+def show_korean_form():
+    st.write("### 외국인 체류지변경 신고서 작성")
+
+    # 신고서 폼 필드들
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.text_input("성명 (한글)", key="name_kr")
+        st.text_input("성명 (영문)", key="name_en")
+        st.date_input("생년월일", key="birth_date")
+        st.text_input("외국인등록번호", key="alien_reg_no")
+
+    with col2:
+        st.text_input("국적", key="nationality")
+        st.text_input("전화번호", key="phone")
+        st.text_input("이메일", key="email")
+
+    st.subheader("이전 주소")
+    st.text_input("이전 거주지 주소", key="prev_address")
+
+    st.subheader("새로운 주소")
+    st.text_input("새로운 거주지 주소", key="new_address")
+    st.date_input("전입 일자", key="move_date")
+
+    if st.button("신고서 제출"):
+        st.success("신고서가 성공적으로 제출되었습니다!")
+        # 여기에 실제 제출 로직을 추가할 수 있습니다
+
 # 메인 페이지
 def main_page():
-    st.title("키워드 입력 페이지")
+    st.title("Foreigner Civil Complaint Assistant - English")
+    st.write("This page provides information related to foreigner residence change notifications.")
+
     
-    # 키워드 입력
-    keyword = st.text_input("키워드를 입력하세요:", 
-                           key="keyword_input",
-                           value=st.session_state.keyword)
+    query = st.text_input("Enter your question below", "I want to move, what administrative procedures should I follow?")
     
     # Submit 버튼
-    if st.button("Submit"):
-        if keyword.strip():  # 키워드가 비어있지 않은 경우
-            st.session_state.keyword = keyword
-            switch_to_second_page()
-        else:
-            st.error("키워드를 입력해주세요.")
+    if st.button("Submit Question"):
+        st.session_state.query = query
+        switch_to_second_page()
 
 # 두번째 페이지
 def second_page():
-    st.title("선택 페이지")
-    st.write(f"입력된 키워드: {st.session_state.keyword}")
+   
+    default_response = """
+    First, you need to report your residence change. The residence change must be reported within 15 days of moving.
+    For late reporting, visit the Immigration Office of your new residence area, or you may report at a local government office.
+    Required documents:
+    1. Residence change notification form
+    2. ID: Alien Registration Card
+    3. Proof of residence (lease agreement, accommodation receipt, etc.)
+    """
+    
+    st.write("### Response")
+    st.write(default_response)
     
     # 라디오 버튼으로 선택지 제공
     choice = st.radio(
-        "원하시는 작업을 선택하세요:",
-        ["네이버 방문하기", "정보 입력하기", "PDF 문서 열기"]
+        "Would you like to:",
+        ["Get the form link",
+         "Fill out the form in Korean",
+         "View sample filled form"
+        ]
     )
     
-    if choice == "네이버 방문하기":
-        if st.button("네이버로 이동"):
-            st.markdown("[네이버 바로가기](http://naver.com)")
+    if choice == "Get the form link":
+        if st.button("Get the form link"):
+            st.markdown("[You can download the form here: [Foreign Residence Change Form]](https://www.hygn.go.kr/00428/00435/00501.web)")
             
-    elif choice == "정보 입력하기":
-        with st.form("contact_form"):
-            st.text_input("이름:", key="name")
-            st.text_input("이메일:", key="email")
-            submit_button = st.form_submit_button("제출")
-            
-            if submit_button:
-                if st.session_state.name and st.session_state.email:
-                    handle_form_submit()
-                else:
-                    st.error("모든 필드를 입력해주세요.")
+    elif choice == "Fill out the form in Korean":
+        show_korean_form()      
                     
     else:  # PDF 문서 열기
         if st.button("PDF 열기"):
